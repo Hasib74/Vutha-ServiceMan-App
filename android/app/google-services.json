@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "project_number": "886786190617",
+    "firebase_url": "https://vutha-app-f4804.firebaseio.com",
+    "project_id": "vutha-app-f4804",
+    "storage_bucket": "vutha-app-f4804.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886786190617:android:694d7f8eb550b664d72988",
+        "android_client_info": {
+          "package_name": "com.monu.vutha_admin_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886786190617-66r5urkf55948lhdtpie597ps5a9mejs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.monu.vutha_admin_app",
+            "certificate_hash": "4ec92a5b05b7528bbb3bdbb0d1193e659d035baa"
+          }
+        },
+        {
+          "client_id": "886786190617-cudrfsssukv3q3mlmdv14a1a6f72m2am.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPo0GtIRlJ80MFvS87mGP-IUCUUazWsU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886786190617-cudrfsssukv3q3mlmdv14a1a6f72m2am.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886786190617:android:ae06f7ee3e518295d72988",
+        "android_client_info": {
+          "package_name": "com.monu.vutha_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886786190617-003esihf4utgg7v5udg7v9o8jnin2aml.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.monu.vutha_app",
+            "certificate_hash": "4ec92a5b05b7528bbb3bdbb0d1193e659d035baa"
+          }
+        },
+        {
+          "client_id": "886786190617-cudrfsssukv3q3mlmdv14a1a6f72m2am.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPo0GtIRlJ80MFvS87mGP-IUCUUazWsU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886786190617-cudrfsssukv3q3mlmdv14a1a6f72m2am.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886786190617:android:6cc4ebbd05ceebead72988",
+        "android_client_info": {
+          "package_name": "com.monu.vuthaserviceman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886786190617-o1c2dhs7pnflo8qo0ubc9i5njn4llnv9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.monu.vuthaserviceman",
+            "certificate_hash": "4ec92a5b05b7528bbb3bdbb0d1193e659d035baa"
+          }
+        },
+        {
+          "client_id": "886786190617-cudrfsssukv3q3mlmdv14a1a6f72m2am.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPo0GtIRlJ80MFvS87mGP-IUCUUazWsU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886786190617-cudrfsssukv3q3mlmdv14a1a6f72m2am.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
