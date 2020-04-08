@@ -5,7 +5,7 @@ import 'package:vuthaserviceman/src/Model/Service.dart';
 import 'package:vuthaserviceman/src/Utils/Common.dart';
 
 class ServiceRequested extends StatelessWidget {
-  var number = "+8801727123373";
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +30,9 @@ class ServiceRequested extends StatelessWidget {
                 print("Value  ${value}");
 
                 _serviceList.add(new Service(
+
+
+                    serviceKey: key,
                     userNumber: value["userNumber"],
                     userLat: value["lat"],
                     usterLan: value["lan"],
@@ -46,8 +49,11 @@ class ServiceRequested extends StatelessWidget {
 
                         Navigator.of(context).push(new MaterialPageRoute(
                             builder: (context) => MapActvity(
+                                  serviceKey: _serviceList[index].serviceKey ,
                                   userLan: _serviceList[index].usterLan,
                                   userlat: _serviceList[index].userLat,
+
+
                                 )));
                       },
                       child: Padding(

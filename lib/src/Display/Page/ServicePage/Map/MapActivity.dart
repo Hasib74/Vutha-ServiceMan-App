@@ -1,18 +1,21 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:vuthaserviceman/src/Display/Page/ServicePage/Map/ApiService/MapApisIntregation.dart';
-
+import 'package:vuthaserviceman/src/Utils/Common.dart';
 class MapActvity extends StatefulWidget {
   final userlat;
 
   final userLan;
+  
+  final serviceKey;
 
-  MapActvity({this.userLan, this.userlat});
+  MapActvity({this.userLan, this.userlat,this.serviceKey});
 
   @override
   _MapActvityState createState() => _MapActvityState();
@@ -90,6 +93,17 @@ class _MapActvityState extends State<MapActvity> {
      // });
 
         print("${TAG}   Cureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeent   ${currentLocation}");
+        
+
+
+        print("key = ${widget.serviceKey}");
+        FirebaseDatabase.instance.reference().child("Serve").child(number).child(widget.serviceKey).update({
+
+          "serviceManLat" : currentLocation.latitude,
+          "serviceManLan" : currentLocation.longitude,
+
+        });
+        
 
 
         update();
