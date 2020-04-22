@@ -1,8 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:vuthaserviceman/src/Display/Page/ServicePage/ServiceRequested.dart';
-import 'package:vuthaserviceman/src/Model/Service.dart';
+import 'package:vuthaserviceman/src/Controller/NotificationController.dart'
+    as notification_controller;
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  var number;
+
+  HomePage({this.number});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    notification_controller.registerNotification();
+    notification_controller.configLocalNotification();
+    notification_controller.configureSelectNotificationSubject(context);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    notification_controller.selectNotificationSubject.close();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,10 +73,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-
-    
   }
-
 
   _cards(BuildContext context) {
     return Align(
@@ -91,7 +116,7 @@ class HomePage extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Container(
-            height: 200,
+            height: 180,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               boxShadow: [
@@ -120,7 +145,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -130,7 +154,7 @@ class HomePage extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Container(
-        height: 200,
+        height: 180,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
@@ -165,7 +189,7 @@ class HomePage extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Container(
-        height: 200,
+        height: 180,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
@@ -205,7 +229,7 @@ class HomePage extends StatelessWidget {
               new MaterialPageRoute(builder: (context) => ServiceRequested()));
         },
         child: Container(
-          height: 200,
+          height: 180,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             boxShadow: [
@@ -237,11 +261,7 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
- 
-  
 }
-
 
 class TopWaveClipper extends CustomClipper<Path> {
   @override

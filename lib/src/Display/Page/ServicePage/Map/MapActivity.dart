@@ -6,16 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
-import 'package:vuthaserviceman/src/Display/Page/ServicePage/Map/ApiService/MapApisIntregation.dart';
+import 'package:vuthaserviceman/src/ApiService/MapApisIntregation.dart';
 import 'package:vuthaserviceman/src/Utils/Common.dart';
+
 class MapActvity extends StatefulWidget {
   final userlat;
 
   final userLan;
-  
+
   final serviceKey;
 
-  MapActvity({this.userLan, this.userlat,this.serviceKey});
+  MapActvity({this.userLan, this.userlat, this.serviceKey});
 
   @override
   _MapActvityState createState() => _MapActvityState();
@@ -52,18 +53,16 @@ class _MapActvityState extends State<MapActvity> {
   static final CameraPosition _kGooglePlex =
 */
 
-@override
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
 
     _list_lat_lan.clear();
 
-
     _markers.clear();
 
     //contollerDispose();
-
   }
 
   @override
@@ -85,65 +84,66 @@ class _MapActvityState extends State<MapActvity> {
     location = new Location();
 
     location.onLocationChanged.listen((event) {
-
-
       //setState(() {
-        currentLocation = event;
+      currentLocation = event;
 
-     // });
+      // });
 
-        print("${TAG}   Cureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeent   ${currentLocation}");
-        
+      print(
+          "${TAG}   Cureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeent   ${currentLocation}");
 
+      print("key = ${widget.serviceKey}");
+      FirebaseDatabase.instance
+          .reference()
+          .child("Serve")
+          .child(user_number)
+          .child(widget.serviceKey)
+          .update({
+        "serviceManLat": currentLocation.latitude,
+        "serviceManLan": currentLocation.longitude,
+      });
 
-        print("key = ${widget.serviceKey}");
-        FirebaseDatabase.instance.reference().child("Serve").child(number).child(widget.serviceKey).update({
-
-          "serviceManLat" : currentLocation.latitude,
-          "serviceManLan" : currentLocation.longitude,
-
-        });
-        
-
-
-        update();
-
+      update();
     });
-
-
-
-
   }
 
-
-
-
-  update(){
-
+  update() {
     updatePinOnMap();
 
-    setState(() {
-      if (_list_lat_lan[1] != null) {
-        _list_lat_lan.removeAt(1);
-      }
+    if (mounted) {
+      setState(() {
+        if (_list_lat_lan[1] != null) {
+          _list_lat_lan.removeAt(1);
+        }
 
-      _list_lat_lan.add(
-          new LatLng(currentLocation.latitude, currentLocation.longitude));
-    });
+        _list_lat_lan.add(
+            new LatLng(currentLocation.latitude, currentLocation.longitude));
+      });
+    }
+
+
 
     sendRequest();
 
     GoogleMapsServices()
         .getDistance(
-        LatLng(currentLocation.latitude, currentLocation.longitude),
-        LatLng(widget.userlat, widget.userLan))
+            LatLng(currentLocation.latitude, currentLocation.longitude),
+            LatLng(widget.userlat, widget.userLan))
         .then((value) {
-      setState(() {
-        distance = value[0]["distance"]["text"];
-        duration = value[0]["duration"]["text"];
-      });
-    });
 
+          try{
+
+            setState(() {
+              distance = value[0]["distance"]["text"];
+              duration = value[0]["duration"]["text"];
+            });
+
+          }catch(err){
+
+            print(err);
+          }
+
+    });
   }
 
   CameraPosition initialCameraPosition = CameraPosition(
@@ -153,14 +153,7 @@ class _MapActvityState extends State<MapActvity> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
     print("${TAG}   currrent location  $currentLocation");
-
-
 
     return Scaffold(
       body: Stack(
@@ -225,10 +218,13 @@ class _MapActvityState extends State<MapActvity> {
 
     // do this inside the setState() so Flutter gets notified
     // that a widget update is due
-   // setState(() {
-      // updated position
-      var pinPosition =
-          LatLng(currentLocation.latitude, currentLocation.longitude);
+    // setState(() {
+    // updated position
+    var pinPosition =
+        LatLng(currentLocation.latitude, currentLocation.longitude);
+
+    try{
+
 
       setState(() {
         _list_lat_lan
@@ -240,21 +236,20 @@ class _MapActvityState extends State<MapActvity> {
             onTap: () {},
             position: pinPosition, // updated position
             icon: BitmapDescriptor.defaultMarkerWithHue(10)));
-
-
       });
+    }catch(err){
 
+      print(err);
 
+    }
 
-
-
-      CameraPosition cPosition = CameraPosition(
-        zoom: 14,
-        target: LatLng(currentLocation.latitude, currentLocation.longitude),
-      );
-      final GoogleMapController controller = await _controller.future;
-      controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
-   // });
+    CameraPosition cPosition = CameraPosition(
+      zoom: 14,
+      target: LatLng(currentLocation.latitude, currentLocation.longitude),
+    );
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
+    // });
   }
 
   onMaCreated(GoogleMapController controller) {
@@ -345,13 +340,20 @@ class _MapActvityState extends State<MapActvity> {
   void sendRequest() async {
     // LatLng destination = LatLng(20.008751, 73.780037);
 
-    String route = await _googleMapsServices.getRouteCoordinates(
-        _list_lat_lan[0], _list_lat_lan[1]);
+    try{
+      String route = await _googleMapsServices.getRouteCoordinates(
+          _list_lat_lan[0], _list_lat_lan[1]);
+
+      createRoute(route);
+
+    }catch(err){
+      print(err);
+    }
+
+
 
     // print("Routssssssssssssssss  ${route}");
-    createRoute(route);
+
     //_addMarker(destination,"KTHM Collage");
   }
-
-
 }

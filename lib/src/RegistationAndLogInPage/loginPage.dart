@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vuthaserviceman/src/Display/HomePage.dart';
+import 'package:vuthaserviceman/src/View/HomePage/HomePage.dart';
 import 'package:vuthaserviceman/src/RegistationAndLogInPage/Widget/bezierContainer.dart';
 import 'package:vuthaserviceman/src/RegistationAndLogInPage/signup.dart';
 
