@@ -6,7 +6,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:vuthaserviceman/src/Display/Page/ServicePage/ServiceRequested.dart';
+import 'package:vuthaserviceman/src/Model/NotificationData.dart';
+import 'package:vuthaserviceman/src/Utils/Notification/NotificationService.dart';
+import 'package:vuthaserviceman/src/View/Map/ServiceList/ServiceRequested.dart';
 import 'package:vuthaserviceman/src/Routes/Routs.dart' as routes;
 import 'package:vuthaserviceman/src/Utils/Common.dart';
 
@@ -25,10 +27,10 @@ void registerNotification() {
   firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
     print('onMessage: $message');
 
-
-    if(message["data"]["type"].toString().endsWith("service belongs to service man")){
+    if (message["data"]["type"]
+        .toString()
+        .endsWith("serviceman") ) {
       showNotification(message['data']);
-
     }
 
 
@@ -38,11 +40,11 @@ void registerNotification() {
   }, onResume: (Map<String, dynamic> message) {
     print('onResume: $message');
 
-    if(message["data"]["type"].toString().endsWith("service belongs to service man")){
+    if (message["data"]["type"]
+        .toString()
+        .endsWith("serviceman") ) {
       showNotification(message['data']);
-
     }
-
 
     // onSelectNotification(message["data"]["click_action"]);
 
@@ -50,11 +52,11 @@ void registerNotification() {
   }, onLaunch: (Map<String, dynamic> message) {
     print('onLaunch: $message');
 
-    if(message["data"]["type"].toString().endsWith("service belongs to service man")){
+    if (message["data"]["type"]
+        .toString()
+        .endsWith("serviceman") ) {
       showNotification(message['data']);
-
     }
-
 
     // onSelectNotification(message["data"]["click_action"]);
 
@@ -66,8 +68,11 @@ void tokenUpdate() {
   firebaseMessaging.getToken().then((token) {
     print('token: $token');
 
-    FirebaseDatabase.instance.reference().child("Token").child(ServiceMan)
-         .child(user_number)
+    FirebaseDatabase.instance
+        .reference()
+        .child("Token")
+        .child(ServiceMan)
+        .child(user_number)
         .set({"token": token}).then((_) {
       print("Token Update");
     }).catchError((err) => print(err));
@@ -125,6 +130,50 @@ void configureSelectNotificationSubject(context) {
 
 Future<void> onSelectNotification(String payload, context) async {
   if (payload == "newRequest") {
-    routes.normalRoute(context,  ServiceRequested());
+    routes.normalRoute(context, ServiceRequested());
   }
+}
+
+void sendNotificationToUser(body, title,number) {
+  //print("User Name   ${user.name}");
+
+  FirebaseDatabase.instance
+      .reference()
+      .child(TOKEN)
+      .child(User)
+      .child(number)
+      .once()
+      .then((value) {
+    NotificationData notificationData = new NotificationData(
+        data: Data(
+            type: "user",
+            body: "${body}",
+            title: "${title}",
+            click_action: "newRequest"),
+        to: value.value["token"]);
+
+    NotificationService().sendRequest(notificationData);
+  });
+}
+
+void sendNotificationToAdmin(body,title,number) {
+  //print("User Name   ${user.name}");
+
+  FirebaseDatabase.instance
+      .reference()
+      .child(TOKEN)
+      .child(ADMIN)
+/*      .child(number)*/
+      .once()
+      .then((value) {
+    NotificationData notificationData = new NotificationData(
+        data: Data(
+            type: "admin",
+            body: "${body}",
+            title: "${title}",
+            click_action: "newRequest"),
+        to: value.value["token"]);
+
+    NotificationService().sendRequest(notificationData);
+  });
 }

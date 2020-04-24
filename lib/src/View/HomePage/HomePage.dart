@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:vuthaserviceman/src/Display/Page/ServicePage/ServiceRequested.dart';
+import 'package:vuthaserviceman/src/View/Map/ServiceList/ServiceRequested.dart';
 import 'package:vuthaserviceman/src/Controller/NotificationController.dart'
     as notification_controller;
+
+import 'package:vuthaserviceman/src/Controller/LocationController.dart'
+    as location_controller;
+import 'package:vuthaserviceman/src/View/Widget/CustomToggle.dart';
 
 class HomePage extends StatefulWidget {
   var number;
@@ -17,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    location_controller.updateUserPostion();
 
     notification_controller.registerNotification();
     notification_controller.configLocalNotification();
@@ -34,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
           body: Stack(
@@ -68,6 +75,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               _cards(context),
+              _toggleButton(),
             ],
           ),
         ),
@@ -78,35 +86,37 @@ class _HomePageState extends State<HomePage> {
   _cards(BuildContext context) {
     return Align(
         alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: <Widget>[
-                  _profile(),
-                  SizedBox(
-                    width: 14,
-                  ),
-                  _new_user(),
-                ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: <Widget>[
+                    _profile(),
+                    SizedBox(
+                      width: 14,
+                    ),
+                    _new_user(),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: <Widget>[
-                  _payment(),
-                  SizedBox(
-                    width: 14,
-                  ),
-                  _location(context),
-                ],
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: <Widget>[
+                    _payment(),
+                    SizedBox(
+                      width: 14,
+                    ),
+                    _location(context),
+                  ],
+                ),
+              )
+            ],
+          ),
         ));
   }
 
@@ -260,6 +270,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  _toggleButton() {
+    return Positioned(right: 10, top: 10, child: CustomToggle());
   }
 }
 

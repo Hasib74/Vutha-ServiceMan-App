@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:vuthaserviceman/src/ApiService/MapApisIntregation.dart';
 import 'package:vuthaserviceman/src/Utils/Common.dart';
+import 'package:vuthaserviceman/src/View/Widget/CustomToggle.dart';
 
 class MapActvity extends StatefulWidget {
   final userlat;
@@ -103,12 +104,19 @@ class _MapActvityState extends State<MapActvity> {
         "serviceManLan": currentLocation.longitude,
       });
 
+
+
+
       update();
     });
   }
 
   update() {
-    updatePinOnMap();
+    try {
+      updatePinOnMap();
+    } catch (err) {
+      print(err);
+    }
 
     if (mounted) {
       setState(() {
@@ -121,29 +129,26 @@ class _MapActvityState extends State<MapActvity> {
       });
     }
 
-
-
     sendRequest();
 
-    GoogleMapsServices()
-        .getDistance(
-            LatLng(currentLocation.latitude, currentLocation.longitude),
-            LatLng(widget.userlat, widget.userLan))
-        .then((value) {
-
-          try{
-
-            setState(() {
-              distance = value[0]["distance"]["text"];
-              duration = value[0]["duration"]["text"];
-            });
-
-          }catch(err){
-
-            print(err);
-          }
-
-    });
+    try {
+      GoogleMapsServices()
+          .getDistance(
+              LatLng(currentLocation.latitude, currentLocation.longitude),
+              LatLng(widget.userlat, widget.userLan))
+          .then((value) {
+        try {
+          setState(() {
+            distance = value[0]["distance"]["text"];
+            duration = value[0]["duration"]["text"];
+          });
+        } catch (err) {
+          print(err);
+        }
+      });
+    } catch (err) {
+      print(err);
+    }
   }
 
   CameraPosition initialCameraPosition = CameraPosition(
@@ -159,6 +164,7 @@ class _MapActvityState extends State<MapActvity> {
       body: Stack(
         children: <Widget>[
           GoogleMap(
+           // indoorViewEnabled: false,
             myLocationButtonEnabled: true,
             polylines: _polyline,
             markers: _markers,
@@ -166,7 +172,7 @@ class _MapActvityState extends State<MapActvity> {
             onMapCreated: onMaCreated,
             myLocationEnabled: false,
             scrollGesturesEnabled: true,
-            mapType: MapType.terrain,
+            mapType: MapType.normal,
             rotateGesturesEnabled: false,
             tiltGesturesEnabled: false,
             zoomGesturesEnabled: true,
@@ -205,7 +211,12 @@ class _MapActvityState extends State<MapActvity> {
                 ),
               ),
             ),
-          )
+          ),
+
+          /*Positioned(right: 10,top: 10,
+
+          child: CustomToggle(),
+          )*/
         ],
       ),
     );
@@ -223,9 +234,7 @@ class _MapActvityState extends State<MapActvity> {
     var pinPosition =
         LatLng(currentLocation.latitude, currentLocation.longitude);
 
-    try{
-
-
+    try {
       setState(() {
         _list_lat_lan
             .add(LatLng(currentLocation.latitude, currentLocation.longitude));
@@ -237,18 +246,22 @@ class _MapActvityState extends State<MapActvity> {
             position: pinPosition, // updated position
             icon: BitmapDescriptor.defaultMarkerWithHue(10)));
       });
-    }catch(err){
-
+    } catch (err) {
       print(err);
-
     }
 
     CameraPosition cPosition = CameraPosition(
       zoom: 14,
       target: LatLng(currentLocation.latitude, currentLocation.longitude),
     );
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
+
+    try {
+      final GoogleMapController controller = await _controller.future;
+      controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
+    } catch (err) {
+      print(err);
+    }
+
     // });
   }
 
@@ -340,17 +353,14 @@ class _MapActvityState extends State<MapActvity> {
   void sendRequest() async {
     // LatLng destination = LatLng(20.008751, 73.780037);
 
-    try{
+    try {
       String route = await _googleMapsServices.getRouteCoordinates(
           _list_lat_lan[0], _list_lat_lan[1]);
 
       createRoute(route);
-
-    }catch(err){
+    } catch (err) {
       print(err);
     }
-
-
 
     // print("Routssssssssssssssss  ${route}");
 
